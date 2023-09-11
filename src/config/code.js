@@ -6,6 +6,8 @@ export default {
     USER_DISABLE: 602,
     // 请求参数出错
     BAD_REQUEST: 400,
+    // 资源冲突
+    CONFLICT: 409,
     // 资源未找到
     NOT_FOUND: 404,
     // 更新失败

@@ -7,9 +7,9 @@
             <div class="form">
                 <el-form :model="userForm" :rules="rules" ref='form' label-width="80px" 
                     @keyup.enter.native="send">
-                    <el-form-item label="昵称" prop="nickname">
+                    <!-- <el-form-item label="昵称" prop="nickname">
                         <el-input v-model="userForm.nickname" maxlength="30" prefix-icon="el-icon-user-solid" />
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="用户名" prop="username">
                         <el-input v-model="userForm.username" maxlength="30" prefix-icon="el-icon-user-solid" />
                     </el-form-item>
@@ -38,12 +38,9 @@ export default {
             userForm: {
                 username: '',
                 password: '',
-                nickname: ''
+     
             },
             rules: {
-                nickname: [
-                    { required: true, message: '昵称不能为空', trigger: 'blur', min: 1, max: 30 },
-                ],
                 username: [
                     { required: true, message: '用户名不能为空', trigger: 'blur', min: 1, max: 30 },
                 ],
@@ -58,20 +55,26 @@ export default {
             this.$router.push('/login')
         },
         send() {
-            register(this.userForm).then(res=>{
-                if(res.data.code === code.SUCCESS) {
-                    this.$message.success(res.data.msg)
-                    this.$router.replace('/login')
-                    // 注册失败或是该用户已经被注册
-                } else if (res.data.code === code.WARN) {
-                    if (res.data.msg == '约束冲突') {
+            this.$refs['form'].validate((valid) => {
+                if (valid) {
+                        register(this.userForm).then(res=>{
+                    if(res.data.code === code.SUCCESS) {
+                        this.$message.success(res.data.msg)
+                        this.$router.replace('/login')
+                        // 注册失败或是该用户已经被注册
+                    } else if (res.data.code === code.CONFLICT) {
                         this.$message.error('用户名已存在')
+                    } else {
+                        console.log(res.data.msg);
                     }
-                    console.log(res.data.msg);
+                }).catch(error=>{
+                    console.error(error.message);
+                }) 
+                } else {
+                    return false;
                 }
-            }).catch(error=>{
-                console.error(error.message);
-            }) 
+            });
+            
         }
     }
 }
@@ -79,13 +82,10 @@ export default {
 
 <style scoped>
 .container {
-    /* background-color: aquamarine; */
-    background-image: url("../assets/r.jpg");
-    background-size: cover;
+    background: linear-gradient(to bottom right, #ff5f6d, #ffc371);
     position: relative;
     height: 100%;
     font-size: 18px;
-
 }
 
 .content {
@@ -101,7 +101,7 @@ export default {
     left: 0;
     right: 0;
     margin: auto;
-    box-shadow: 0px 0 16px 1px rgb(0 21 41 / 35%);
+    box-shadow: 0px 0 16px rgb(0 21 41 / 35%);
 }
 
 .head {

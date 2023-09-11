@@ -7,7 +7,7 @@
                 </div>
                 <!-- 头像 -->
                 <div class="head">
-                    <el-avatar :size="100" fit="fill" :src="headImage"></el-avatar>
+                    <el-avatar :size="100" fit="fill" :src="avatar"></el-avatar>
                 </div>
                 <!-- 内容区 -->
                 <ul class="list-group">
@@ -90,8 +90,8 @@ export default {
         })
     },
     computed: {
-        headImage() {
-            return this.user.image || config.headImg
+        avatar() {
+            return this.user.avatar || config.headImg
         },
     },
 }

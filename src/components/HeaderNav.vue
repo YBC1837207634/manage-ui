@@ -10,7 +10,7 @@
             <div class="top-right-item right-float">
                 <span class="userName ">{{ nickname }}</span>
                 <!-- 右侧头像区域 -->
-                <el-avatar :src="headImage" :size="50" shape="square" class="head-icon">
+                <el-avatar :src="avatar" :size="50" shape="square" class="head-icon">
                 </el-avatar>
                 <!-- 下拉菜单 -->
                 <el-dropdown @command="handleCommand">
@@ -78,8 +78,8 @@ export default {
         iconName() {
             return this.iconStyle[this.$store.state.isCollapse]
         },
-        headImage() {
-            return this.userInfo.image || config.headImg
+        avatar() {
+            return this.userInfo.avatar || config.headImg
         },
         nickname() {
             return this.userInfo.nickname

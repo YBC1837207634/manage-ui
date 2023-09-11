@@ -76,9 +76,7 @@ export default {
 </script>
 <style scoped>
 .container {
-    /* background-color: aquamarine; */
-    background-image: url("../assets/v.jpg");
-    background-size: cover;
+    background: linear-gradient(to bottom right, #ff5f6d, #ffc371);
     position: relative;
     height: 100%;
     font-size: 18px;
@@ -97,7 +95,7 @@ export default {
     left: 0;
     right: 0;
     margin: auto;
-    box-shadow: 0px 0 16px 1px rgb(0 21 41 / 35%);
+    box-shadow: 0px 0 16px rgb(0 21 41 / 35%);
 }
 
 .head {
