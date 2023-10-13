@@ -26,12 +26,9 @@
 </template>
 <script>
 import { login } from '@/api/user.js'
-import code from '@/config/code'
+import { setToken } from '@/utils/auth'
 
 export default {
-    created() {
-        sessionStorage.removeItem('token')
-    },
     data() {
         return {
             userForm: {
@@ -49,19 +46,15 @@ export default {
         }
     },
     methods: {
-        send() {
+       send() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                    login(this.userForm.username, this.userForm.password).then(res => {
-                        if (res.data.code === code.WARN) {
-                            this.$message.error(res.data.msg);
-                        } else if (res.data.code === code.SUCCESS) {
-                            sessionStorage.setItem('token', res.data.token)
-                            this.$message.success('登陆成功！')
-                            this.$router.replace('/index')
-                        }
+                     login(this.userForm.username, this.userForm.password).then(res => {
+                        setToken(res.data.token)
+                        this.$message.success(res.data.msg)
+                        this.$router.push('/index')
                     }).catch(error => {
-                        console.log(error.message);
+                        this.$message.error(error);
                     })
                 } else {
                     return false;
@@ -70,7 +63,8 @@ export default {
         },
         register() {
             this.$router.push('/register')
-        }
+        },
+        
     }
 }
 </script>

@@ -14,6 +14,7 @@ export default {
     NOT_MODIFY: 402,
     // 认证失败，令牌过期
     UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
     // 通用错误
     ERROR: 500,
 

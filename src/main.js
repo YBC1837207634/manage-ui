@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
-import '@/assets/css/index.css'
 import App from '@/App.vue'
 import VueRouter from 'vue-router'
 import router from '@/router';
@@ -43,16 +42,35 @@ import {
   Card,
   Tabs,
   TabPane,
-  Radio
+  Radio,
+  Popover,
+  Tag,
+  Switch,
+  DatePicker,
+  Tree,
+  Calendar,
+  Upload
 
 } from 'element-ui';
+
+import 'default-passive-events'
+import Scrollbar from 'element-ui/packages/scrollbar'
+import '@/assets/css/index.css'
+import { hasPermi } from './utils/permissionUtils';
+// fade/zoom 等
+import 'element-ui/lib/theme-chalk/base.css';
+// collapse 展开折叠
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+import 'animate.css';
 
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
 Vue.use(Loading.directive)  // v-loading
+Vue.use(Scrollbar)
 
+Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.component(Container.name, Container);
 Vue.component(Header.name, Header);
 Vue.component(Aside.name, Aside);
@@ -88,7 +106,15 @@ Vue.component(Card.name, Card);
 Vue.component(TabPane.name, TabPane);
 Vue.component(Tabs.name, Tabs);
 Vue.component(Radio.name, Radio);
+Vue.component(Popover.name, Popover)
+Vue.component(Tag.name, Tag)
+Vue.component(Switch.name, Switch)
+Vue.component(DatePicker.name, DatePicker)
+Vue.component(Tree.name, Tree)
+Vue.component(Calendar.name, Calendar)
+Vue.component(Upload.name, Upload)
 
+Vue.prototype.$hasPermi = hasPermi
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;
@@ -99,8 +125,7 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 };
 
-
 new Vue({
   render: h => h(App),
-  router, store
+  router, store,
 }).$mount('#app')

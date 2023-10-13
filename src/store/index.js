@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Vuex from 'vuex';
-
-
+import permissions from "./modules/permissions";
+import user from "./modules/user";
+import getters from "./getters";
 
 Vue.use(Vuex)
 
@@ -18,8 +19,10 @@ const store = new Vuex.Store({
       },
 
     },
-    getters: {
-
+    getters,
+    modules: {
+      permissions,
+      user,
     }
   })
 

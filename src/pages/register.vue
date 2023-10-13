@@ -2,14 +2,11 @@
     <div class="container">
         <div class="content">
             <div class="head">
-                <h2>登陆</h2>
+                <h2>注册</h2>
             </div>
             <div class="form">
                 <el-form :model="userForm" :rules="rules" ref='form' label-width="80px" 
                     @keyup.enter.native="send">
-                    <!-- <el-form-item label="昵称" prop="nickname">
-                        <el-input v-model="userForm.nickname" maxlength="30" prefix-icon="el-icon-user-solid" />
-                    </el-form-item> -->
                     <el-form-item label="用户名" prop="username">
                         <el-input v-model="userForm.username" maxlength="30" prefix-icon="el-icon-user-solid" />
                     </el-form-item>
@@ -30,7 +27,6 @@
 
 <script>
 import { register } from '@/api/user'
-import code from '@/config/code'
 
 export default {
     data() {
@@ -38,7 +34,6 @@ export default {
             userForm: {
                 username: '',
                 password: '',
-     
             },
             rules: {
                 username: [
@@ -57,19 +52,12 @@ export default {
         send() {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
-                        register(this.userForm).then(res=>{
-                    if(res.data.code === code.SUCCESS) {
+                    register(this.userForm).then(res=>{
                         this.$message.success(res.data.msg)
                         this.$router.replace('/login')
-                        // 注册失败或是该用户已经被注册
-                    } else if (res.data.code === code.CONFLICT) {
-                        this.$message.error('用户名已存在')
-                    } else {
-                        console.log(res.data.msg);
-                    }
-                }).catch(error=>{
-                    console.error(error.message);
-                }) 
+                    }).catch(error=>{
+                        this.$message.error(error)
+                    }) 
                 } else {
                     return false;
                 }

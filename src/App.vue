@@ -3,11 +3,11 @@
     <keep-alive include="Layout">   
         <router-view></router-view>
     </keep-alive>
-    <!-- <router-view></router-view> -->
   </div>
 </template>
 
 <script>
+
 
 export default {
     name: 'App',
@@ -16,5 +16,16 @@ export default {
 
 <style>
 
+/*隐藏文字*/
+.el-menu--collapse .el-submenu__title span {
+    display: none;
+}
+/*隐藏 > */
+.el-menu--collapse  .el-icon-arrow-right {
+    display: none;
+}
 
+.el-scrollbar__wrap {
+  overflow-x: hidden ; 
+}
 </style>

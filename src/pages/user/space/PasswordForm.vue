@@ -17,7 +17,6 @@
 
 <script>
 import { updateUserPwd } from '@/api/user';
-import code from '@/config/code';
 
 export default {
     data() {
@@ -62,14 +61,10 @@ export default {
                 if (valid) {
                     // 修改密码
                     updateUserPwd(this.ruleForm.password).then(res=>{
-                        if (res.data.code === code.SUCCESS) {
-                            this.$message.success(res.data.msg)
-                            this.$router.replace('/login')
-                        } else if (res.data.code === code.NOT_MODIFY) {
-                            this.$message.error(res.data.msg)
-                        }
+                        this.$message.success(res.data.msg)
+                        this.$store.dispatch('user/Exit')
                     }).catch(error=>{
-                        console.warn(error.message);
+                        this.$message.error(error)
                     })
                 } else {
                     return false;

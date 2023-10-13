@@ -12,8 +12,8 @@
         </el-form-item>
         <el-form-item label="性别">
             <el-radio-group v-model="user.gender">
-                <el-radio :label="0">男</el-radio>
-                <el-radio :label="1">女</el-radio>
+                <el-radio :label="'男'">男</el-radio>
+                <el-radio :label="'女'">女</el-radio>
             </el-radio-group>
         </el-form-item>
         <el-form-item>
@@ -25,7 +25,6 @@
 
 <script>
 import { updateUserSpace } from '@/api/user';
-import code from '@/config/code';
 
 export default {
     props: ['user'],
@@ -44,26 +43,17 @@ export default {
             this.$refs['form'].validate((valid) => {
                 if (valid) {
                     updateUserSpace(this.user).then((response) => {
-                        if (response.data.code === code.SUCCESS) {
-                            this.$message({
-                                type: 'success',
-                                message: response.data.msg
-                            })
-                            location.reload()
-                            
-                            // 更新失败
-                        } else if (response.data.code === code.NOT_MODIFY){  
-                            this.$message({
-                                type: 'error',
-                                message: response.data.msg
-                            })
-                        }
+                        this.$message({
+                            type: 'success',
+                            message: response.data.msg
+                        })
+                        // location.reload()
+                        //     // 更新失败
                     })
                     .catch((error) => {
-                        console.warn(error.message);
+                        this.$message.error(error)
                     })
                 } else {
-                    // console.log("error submit!!");
                     return false;
                 }
             });
