@@ -83,7 +83,7 @@
                 <el-form-item label="选择图标" class="dialog-input" v-if="form.menuType!='B'">
                     <el-select v-model.trim="form.icon" placeholder="请选择图标" :popper-append-to-body="false">
                         <el-option v-for="(icon, index) in iconList" :key="index" :value="icon">
-                            <i :class="icon"></i>
+                            <i :class="icon" style="font-size: 30px;"></i>
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -132,6 +132,7 @@
 
 <script>
 import { menuList, addMenu, removeMenu, updateMenu, getMenu } from '@/api/menu';
+import icons from '@/config/icon'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
@@ -155,11 +156,7 @@ export default {
             // 新增表单
             form: {},
             menu: {},
-            iconList: [
-                "el-icon-platform-eleme",
-                "el-icon-user",
-                "el-icon-phone"
-            ]
+            iconList: icons
         }
     },
     methods: {
