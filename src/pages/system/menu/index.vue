@@ -15,13 +15,20 @@
                 size="small" 
                 type="success" 
                 icon="el-icon-search" 
-                @click="changeExpand">
+                @click="changeExpand()">
                 展开/折叠所有
             </el-button>
         </div>
         <!-- 树状表格 -->
-        <el-table :data="menuData[0].children" size="medium" :header-cell-style="{ background: '#F8F8F9', color: '#000' }"
-            row-key="id" ref="table">
+        <el-table 
+            v-if="refreshTable"
+            :data="menuData[0].children" 
+            size="medium" 
+            :header-cell-style="{ background: '#F8F8F9', color: '#000' }"
+            style="font-size: 15px; " 
+            :default-expand-all="isExpand"
+            row-key="id" 
+            ref="table">
             <el-table-column prop="menuName" label="菜单名称" align="center" width="250px"></el-table-column>
             <el-table-column prop="icon" label="图标" align="center">
                 <template slot-scope="scope">
@@ -42,6 +49,14 @@
             <el-table-column prop="createTime" label="创建时间"></el-table-column>
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
+                    <el-button 
+                        size="small" 
+                        type="text" 
+                        style="font-size: 14px"
+                        @click="handlerAdd(scope.row.id)"
+                        :disabled="!$hasPermi(['system:menu:add'])">
+                        新增
+                    </el-button>
                     <el-button 
                         size="small" 
                         type="text" 
@@ -151,6 +166,8 @@ export default {
             title: '',
             // 是否展开所有行
             isExpand: false,
+            // 是否显示表格
+            refreshTable: true,
             // 树选择器
             menuData: [{ id: 0, children: []}],  // 菜单列表
             // 新增表单
@@ -217,6 +234,10 @@ export default {
             this.title = '菜单添加'
             this.dialogVisible = true
         },
+        handlerAdd(parentId) {
+            this.handlerSave()
+            this.form.parentId = parentId
+        },
         // 删除单个
         HandlerDelete(index, row) {
             this.$confirm(`是否删除该菜单`, "提示", {
@@ -226,8 +247,8 @@ export default {
             }).then(() => {
                 removeMenu(row.id)
                     .then((res) => {
-                        this.$message.success(res.data.msg);
                         this.getMenuList();
+                        this.$message.success(res.data.msg);
                     }).catch((e) => this.$message.error(e));
             }).catch((e) => e);
         },
@@ -250,19 +271,19 @@ export default {
         },
         // 切换表格是否展开折叠
         changeExpand() {
-            this.isExpand = !this.isExpand
-            this.menuData[0].children.forEach(row => {
-                this.$refs.table.toggleRowExpansion(row, this.isExpand) // 全部折叠
-            })
+            this.refreshTable = false;
+            this.isExpand = !this.isExpand;
+            // 将回调延迟到下次 DOM 更新循环之后执行
+            this.$nextTick(() => {
+                this.refreshTable = true;
+            });
         },
+        
     }
 }
 </script>
 
 <style scoped>
-.app-container {
-    padding: 20px 20px;
-}
 
 .top {
     /* margin: 20px 0; */
@@ -282,7 +303,7 @@ export default {
 }
 
 .top-button-div {
-    margin: 20px 0;
+    margin-bottom: 20px;
     font-size: 12px;
 
 }

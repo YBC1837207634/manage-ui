@@ -3,23 +3,23 @@
         <template v-for="(route, index) in asideRouter" >
             <!-- && route.children.length > 0) || (route.redirect && route.redirect === 'noRedirect') -->
             <el-submenu
-                v-if="(route.meta.aside === true && route.children && route.children != null)"  
-                :index="route.path"
+                v-if="((route.meta.aside === true && route.children && route.children != null))"  
+                :index="getPath(parentPath, route.path)"
                 :key="index + route.path"
                 >
                 <template slot="title">
                     <i :class="route.meta.icon"></i>
                     <span>{{ route.meta.title }}</span>
                 </template>
-                <MenuItem :asideRouter="route.children" :parentPath="route.path"></MenuItem>
+                <MenuItem :asideRouter="route.children" :parentPath="getPath(parentPath, route.path)"></MenuItem>
             </el-submenu>
             <el-menu-item 
                 v-else-if="route.meta.aside === true"
-                :index="parentPath + '/' + route.path"
+                :index="getPath(parentPath, route.path)"
                 :key="index + route.path"
                 >
                 <i :class="route.meta.icon"></i>
-                <span slot="title">{{ route.meta.title }}</span>
+                <span slot="title">{{  route.meta.title }}</span>
             </el-menu-item>
         </template>
     </div>
@@ -33,6 +33,22 @@
             parentPath: {
                 type: String,
                 default: ''
+            }
+        },
+        methods: {
+            getPath(parentPath, path) {
+                if (parentPath != null && parentPath != '') {
+                    if (parentPath.startsWith('/')) {
+                        if (path.startsWith('/'))
+                            return parentPath + path
+                        else 
+                            return parentPath + '/' + path
+                    }
+                    else {
+                        return '/' + parentPath + '/' + path;
+                    }
+                } 
+                return path;
             }
         }
     }

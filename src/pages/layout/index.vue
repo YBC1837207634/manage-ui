@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import AsideNav from './AsideNav.vue'
-import HeaderNav from './HeaderNav'
+import AsideNav from './components/AsideNav'
+import HeaderNav from './components/HeaderNav'
 
 export default {
     components: {
@@ -42,7 +42,6 @@ export default {
 }
 
 .container {
-    /* position: fixed; */
     font-size: 20px;
     height: 100%;
     width: 100%;
@@ -61,7 +60,7 @@ export default {
     position: relative;
     min-height: calc(100vh - 80px);
     overflow: hidden;
-
+    padding: 20px 20px;
 }
 
 /* fade-transform */

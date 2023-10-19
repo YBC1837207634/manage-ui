@@ -2,10 +2,10 @@
     <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
         <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
+            <el-input type="password" v-model="ruleForm.password" autocomplete="off" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+            <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off" maxlength="20"></el-input>
         </el-form-item>
 
         <el-form-item>
@@ -46,10 +46,10 @@ export default {
             },
             rules: {
                 password: [
-                    { required: true, validator: validatePass, trigger: 'blur' }
+                    { required: true, validator: validatePass, trigger: 'blur',min: 1, max: 20 }
                 ],
                 checkPass: [
-                    { required: true,  validator: validatePass2, trigger: 'blur' }
+                    { required: true,  validator: validatePass2, trigger: 'blur',min: 1, max: 20 }
                 ],
             }
 

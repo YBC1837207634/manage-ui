@@ -7,7 +7,8 @@ const state = {
     userInfo: {},
     purview: [],
     isLogin: false,
-    token: ''
+    token: '',
+    activeMenu: ''
 }
 
 const actions = {
@@ -65,6 +66,9 @@ const mutations = {
     },
     UPDATE_AVATAR(state, url) {
         state.userInfo.avatar = url
+    },
+    SET_ACTIVE_MENU(state, path) {
+        state.activeMenu = path
     }
 }
 

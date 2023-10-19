@@ -113,6 +113,7 @@
         <el-table
         :data="tableData"
         size="medium"
+        style="font-size: 15px;"
         :header-cell-style="{ background: '#F8F8F9', color: '#000' }"
         @selection-change="selectRole">
       <el-table-column align="center" type="selection" width="55">
@@ -166,11 +167,15 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination
-        style="text-align: center; padding-top: 10px"
-        @current-change="nextPage"
-        :page-size="params.pageSize"
-        layout="total, prev, pager, next, jumper"
-        :total="total">
+      background
+      style="text-align: center; padding-top: 20px"
+      @current-change="nextPage"
+      @size-change="handleSizeChange"
+      :page-size="params.pageSize"
+      :current-page.sync="currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      layout="total, prev, pager, next, sizes, jumper"
+      :total="total">
     </el-pagination>
         <!-- Dialog -->
         <el-dialog title="菜单更新" :visible.sync="dialogUpdateFormVisible" :modal="false" width="600px">
@@ -272,6 +277,8 @@ export default {
                 page: 1,
                 pageSize: 10,
             },
+            pageSize: 10,
+            currentPage: 1,
             timeList: [],
             total: 0,
             // 表单校验
@@ -296,21 +303,22 @@ export default {
     methods: {
         // 角色修改
         handleEdit(index, row) {
-            this.dialogUpdateFormVisible = true
+            this.resetForm()
             getRole(row.id).then(res => {
                 this.role = res.data.data
             }).catch(error => error)
             getMenuTreeSelect(row.id).then(res=> {
                 this.menuTree = Object.freeze(res.data.data.items)
                 this.clickId = Object.freeze(res.data.data.clickId)
-            }).catch(error=>console.error(error))
+            }).catch(e=>e)
+            this.dialogUpdateFormVisible = true
         },
         // 角色更新
         update() {
             let checked = this.$refs.tree.getHalfCheckedKeys().concat(this.$refs.tree.getCheckedKeys())
             updateRole({...this.role, menuAssignment: checked}).then(res => {
                 this.$message.success(res.data.msg)
-            }).catch(error => console.log(error))
+            }).catch(e=>this.$message.error(e))
             this.dialogUpdateFormVisible = false
         },
         // 修改角色状态
@@ -336,10 +344,11 @@ export default {
         },
         // 新增按钮
         handleSave() {
-            this.dialogSaveFormVisible = true;
+            this.resetForm()
             getMenuTree().then(res=> {
                 this.menuTree = Object.freeze(res.data.data)
-            }).catch(error=>console.error(error))
+            }).catch(error=>error)
+            this.dialogSaveFormVisible = true;
         },
         // 添加角色
         save() {
@@ -347,8 +356,8 @@ export default {
             this.form.menuAssignment = checked
             saveRole(this.form)
                 .then(() => {
-                    this.$message.success("保存成功！");
                     this.getList();
+                    this.$message.success("保存成功！");
                 })
                 .catch((e) => this.$message.error(e));
             this.form = {}
@@ -378,6 +387,11 @@ export default {
             this.params.page = currentPage;
             this.getList();
         },
+        // 选择一页显示数据数量
+        handleSizeChange(val) {
+            this.params.pageSize = this.pageSize = val;
+            this.getList()
+        },
         // 多选
         selectRole(val) {
             this.checked = val.map((item) => Object.freeze(item.id));
@@ -395,7 +409,7 @@ export default {
         // 批量删除
         handleDeleteRoles() {
             if (this.checked.length != 0)
-                this.$confirm(`是否删除角色`, "提示", {
+                this.$confirm(`选中${this.checked.length}条数据，是否删除`, "提示", {
                     confirmButtonText: "确定",
                     cancelButtonText: "取消",
                     type: "warning",
@@ -407,8 +421,9 @@ export default {
         deleteRole(ids) {
             removeRole(ids)
                 .then((res) => {
-                    this.$message.success(res.data.msg);
+                    this.clicked = []
                     this.getList();
+                    this.$message.success(res.data.msg);
                 }).catch((e) => this.$message.error(e));
         },
         // 根据条件分页查询
@@ -416,16 +431,24 @@ export default {
             this.params.page = 1;
             this.getList();
         },
-        // 重置表单
+        // 重置参数
         reset() {
             this.params = {
                 page: 1,
-                pageSize: 10,
+                pageSize: this.pageSize,
             };
-            this.timeList = [];
-            this.getList();
+            this.timeList = []
+            this.currentPage
+            this.getList()
         },
-       
+        resetForm() {
+            this.form = {
+                status: 1
+            }
+            this.menuTree = [],
+            // 选择的菜单id
+            this.clickId = []
+        },
     },
    
 
@@ -433,7 +456,6 @@ export default {
 </script>
 <style  scoped>
   .app-container {
-    padding: 20px 20px;
   }
 
   .top {

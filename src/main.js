@@ -49,7 +49,8 @@ import {
   DatePicker,
   Tree,
   Calendar,
-  Upload
+  Upload,
+  Notification
 
 } from 'element-ui';
 
@@ -113,6 +114,7 @@ Vue.component(DatePicker.name, DatePicker)
 Vue.component(Tree.name, Tree)
 Vue.component(Calendar.name, Calendar)
 Vue.component(Upload.name, Upload)
+Vue.component(Notification.name, Notification)
 
 Vue.prototype.$hasPermi = hasPermi
 Vue.prototype.$confirm = MessageBox.confirm;

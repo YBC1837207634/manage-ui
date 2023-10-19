@@ -39,13 +39,6 @@ export const basicRoutes = [
         component: () => import('@/pages/login')
     },
     {
-        path: '/register',
-        name: '注册',
-        meta: {noAuth: true, aside: false},
-        component: () => import('@/pages/register')
-
-    },
-    {
         path: '/user',
         redirect: 'noRedirect',
         component: Layout,
@@ -76,6 +69,23 @@ var router = new VueRouter({
     routes: basicRoutes
 }) 
 
+/**
+ * 处理多级路由缓存
+ * 递归处理多余的 layout : <router-view>，
+ * 让需要访问的组件保持在第一层 index : <router-view> 之下
+ * @param to
+ */
+function handleKeepAlive (to) {
+    if (to.matched && to.matched.length > 2) {
+        for (let i = 0; i < to.matched.length; i++) {
+            const element = to.matched[i]
+            if (element.components.default.__file && element.components.default.__file.includes("ParentView.vue")) {
+                to.matched.splice(i, 1)
+                handleKeepAlive(to)
+            }
+        }
+    }
+}
 
 // 全局前置路由守卫
 router.beforeEach((to, from, next)=>{
@@ -93,6 +103,8 @@ router.beforeEach((to, from, next)=>{
         } else {
             next()
         }
+        store.commit('user/SET_ACTIVE_MENU', to.fullPath)
+        handleKeepAlive(to)
         // 没有登陆
     } else {
         // 所去的路由需要登陆

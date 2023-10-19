@@ -121,6 +121,7 @@
       size="medium"
       :header-cell-style="{ background: '#F8F8F9', color: '#000' }"
       @selection-change="selectUser"
+      style="font-size: 15px;"
     >
       <el-table-column align="center" type="selection" width="55">
       </el-table-column>
@@ -175,12 +176,15 @@
     </el-table>
     <!-- 分页 -->
     <el-pagination
-      style="text-align: center; padding-top: 10px"
+      background
+      style="text-align: center; padding-top: 20px"
       @current-change="nextPage"
+      @size-change="handleSizeChange"
       :page-size="params.pageSize"
-      layout="total, prev, pager, next, jumper"
-      :total="total"
-    >
+      :current-page.sync="currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      layout="total, prev, pager, next, sizes, jumper"
+      :total="total">
     </el-pagination>
     <!-- Dialog -->
     <el-dialog
@@ -361,6 +365,8 @@ export default {
         page: 1,
         pageSize: 10,
       },
+      pageSize: 10,
+      currentPage: 1,
       timeList: [],
       total: 0,
       // 表单校验
@@ -404,14 +410,21 @@ export default {
         .catch((e) => this.$message.error(e));
       this.dialogSaveFormVisible = false;
     },
-    // 重置表单
+    // 重置参数
     reset() {
       this.params = {
         page: 1,
-        pageSize: 10,
+        pageSize: this.pageSize,
       };
+      this.currentPage = 1;
       this.timeList = [];
       this.getList();
+    },
+    resetForm() {
+      this.form = {
+        gender: '男',
+        status: 1
+      }
     },
     getList() {
       Object.keys(this.params).forEach((key) => {
@@ -440,7 +453,6 @@ export default {
           roles.forEach((role) =>
             this.roleOptions.push({ value: role.id, label: role.name })
           );
-          console.log(this.roleOptions);
         })
         .catch((e) => console.log(e));
     },
@@ -449,30 +461,37 @@ export default {
       this.params.page = currentPage;
       this.getList();
     },
+    // 选择一页显示数据数量
+    handleSizeChange(val) {
+      this.params.pageSize = this.pageSize = val;
+      this.getList()
+    },
     // 多选
     selectUser(val) {
       this.checked = val.map((item) => Object.freeze(item.id));
     },
     // 新增按钮
     handleSaveUser() {
-      this.dialogSaveFormVisible = true;
+      this.resetForm()
       this.rouleList();
+      this.dialogSaveFormVisible = true;
     },
     // 编辑按钮
     handleEdit(index, row) {
-      this.dialogUpdateFormVisible = true;
+      this.resetForm()
       // 获取单个用户信息
       geyUserById(row.id)
         .then((res) => {
+          this.rouleList();
           let roles = [];
           this.user = this.roleOptions = roles;
           this.user = res.data.data;
           this.user.roles.forEach((role) => roles.push(role.id));
           this.user.roles = null;
           this.$set(this.user, "roleIds", roles);
-          this.rouleList();
         })
         .catch((e) => this.$message.error(e));
+        this.dialogUpdateFormVisible = true;
     },
     // 删除单个用户
     handleDelete(index, row) {
@@ -489,7 +508,7 @@ export default {
     // 批量删除用户
     handleDeleteUsers() {
       if (this.checked.length != 0)
-        this.$confirm(`是否删除用户`, "提示", {
+        this.$confirm(`选中${this.checked.length}条数据，是否删除`, "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
@@ -503,8 +522,9 @@ export default {
     deleteUser(ids) {
       remove(ids)
         .then((res) => {
-          this.$message.success(res.data.msg);
+          this.clicked = []
           this.getList();
+          this.$message.success(res.data.msg);
         })
         .catch((e) => this.$message.error(e));
     },
@@ -572,7 +592,7 @@ export default {
 </script>
 <style  scoped>
 .app-container {
-  padding: 20px 20px;
+
 }
 
 .top {

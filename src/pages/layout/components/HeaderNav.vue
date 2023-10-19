@@ -59,15 +59,14 @@ export default {
                 false: 'el-icon-s-fold'
             },
             breadcrumb: [],
-            tags: [],
+            tags: [{ name: 'Index', meta: { title: '首页' }, path: '/index' }],
             current: 'Index',
         }
     },
     created() {
         // 更新面包屑导航
         this.UpdateBreadcrumb(this.$route)
-        // 
-        this.tags.push({ name: 'Index', meta: { title: '首页' }, path: '/index' })
+        this.updateTagsNav(this.$route)
     },
     watch: {
         $route(route) {
@@ -115,6 +114,7 @@ export default {
             this.current = route.name
         },
         switchTag(tag) {
+            
             // 避免多次点击
             if (this.current != tag.name) {
                 // 切换显示焦点
@@ -125,10 +125,16 @@ export default {
         },
         closeTag(tag, index) {
             if (tag.fullPath == this.$route.fullPath) {
-                this.switchTag(this.tags[index - 1])
+                if (index == 0) {
+                    return 
+                }
+                this.switchTag(this.tags[index - 1])    
             }
-            // 将关闭的组件移除缓存
-            this.RemoveCache(tag.name)
+            // 如果要关闭的页签是缓存的就删除该缓存
+            if (tag.meta.cache && tag.meta.cache != null && tag.meta.cache === 1) {
+                // 将关闭的组件移除缓存
+                this.RemoveCache(tag.name)
+            }
             this.tags.splice(index, 1)
         },
         ...mapActions('permissions', ['RemoveCache', 'AddCache'])
@@ -147,7 +153,6 @@ export default {
 .header-top {
     height: 50px;
     line-height: 50px;
-    /* box-shadow: 2px 0 6px rgb(0 21 41 / 35%); */
     box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
 }
 
@@ -157,7 +162,7 @@ export default {
 }
 
 .header-bottom {
-    /* padding-top: 10px; */
+    padding: 2px 0;
     padding-left: 10px;
 }
 
@@ -171,46 +176,48 @@ export default {
 .head-icon {
     border: 1px black solid;
     margin-top: 4px;
-    /* margin-right: 5px; */
 }
 
 .tags {
-    height: 30px;
+    height: 26px;
     display: flex;
-    /* background-color: rgb(15, 249, 2); */
 }
 
 .tag {
-    height: 30px;
-    /* background-color: aquamarine; */
     margin-right: 5px;
     padding: 0 8px;
-    /* padding: 12px 16px; */
-    /* border-radius: 8px 8px 0 0; */
-    border: black 1px solid;
+    border: 1px solid #d8dce5;
     box-sizing: border-box;
     font-size: 15px;
-    line-height: 30px;
+    line-height: 26px;
     text-align: center;
-    background: rgba(0, 0, 0, 0.02);
+    background: #fff;
     transition: all .4s, color .4s;
+    border-radius: 3px;
 }
 
 .tag-active>.tag-content::before {
     content: "";
-    background: #000000;
+    background: #fff;
     display: inline-block;
     width: 8px;
     height: 8px;
     border-radius: 50%;
     position: relative;
     margin-right: 2px;
+
 }
 
 .tag-active {
+    display: flex;
+    justify-content: center; /* 水平居中对齐 */
+    align-items: center; /* 垂直居中对齐 */
     /* width: 100px; */
-    background-color: #67C23A;
-}
+    /* background-color: #42b983; */
+    color: #fff;
+    border-color: #4a95ff;
+    background-color: #4a95ff;
+}   
 
 .tag:hover {
     cursor: pointer;

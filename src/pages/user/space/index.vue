@@ -114,8 +114,8 @@ export default {
 
 <style scoped>
 .main {
-    padding: 20px;
-    font-size: 13px;
+    /* padding: 20px; */
+    font-size: 14px;
 }
 
 .left-item {
