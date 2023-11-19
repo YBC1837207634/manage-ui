@@ -108,7 +108,7 @@ router.beforeEach((to, from, next)=>{
         // 没有登陆
     } else {
         // 所去的路由需要登陆
-        if (to.meta.noAuth == undefined || to.meta.noAuth == null || to.meta.noAuth == false) {
+        if (to.meta.noAuth == null || to.meta.noAuth == undefined || to.meta.noAuth == false) {
             let token = getToken()
             if (token == null || token =='') {
                 next({replace: true, path: '/login'})

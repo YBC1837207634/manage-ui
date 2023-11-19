@@ -14,7 +14,7 @@
             <div class="top-right-item right-float">
                 <span class="userName ">{{ userInfo.nickname }}</span>
                 <!-- 右侧头像区域 -->
-                <el-avatar :src="userInfo.avatar" :size="42" shape="square" class="head-icon">
+                <el-avatar :src="avatar" :size="42" shape="square" class="head-icon">
                 </el-avatar>
                 <!-- 下拉菜单 -->
                 <el-dropdown @command="handleCommand">
@@ -51,6 +51,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import config from '@/config';
+
 export default {
     data() {
         return {
@@ -104,6 +106,7 @@ export default {
             }
         },
         updateTagsNav(route) {
+            if (route.path === '/login') return 
             // 如果当前页签列表中没有页签就添加进去
             if (!this.tags.some(e => e.path === route.path)) {
                 this.tags.push(route)
@@ -114,7 +117,6 @@ export default {
             this.current = route.name
         },
         switchTag(tag) {
-            
             // 避免多次点击
             if (this.current != tag.name) {
                 // 切换显示焦点
@@ -142,6 +144,9 @@ export default {
     computed: {
         iconName() {
             return this.iconStyle[this.$store.state.isCollapse]
+        },
+        avatar() {
+            return config.ossUrl + this.userInfo.avatar
         },
         ...mapState('user', ['userInfo']),
     }

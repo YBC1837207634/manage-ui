@@ -343,7 +343,7 @@ import { mapState } from "vuex";
 import code from "@/config/code";
 
 export default {
-  name: "User",
+  name: "SysUser",
   data() {
     return {
       // dialog

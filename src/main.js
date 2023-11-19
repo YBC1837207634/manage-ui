@@ -63,6 +63,9 @@ import 'element-ui/lib/theme-chalk/base.css';
 // collapse 展开折叠
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import 'animate.css';
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
 
 
 Vue.config.productionTip = false
@@ -71,6 +74,7 @@ Vue.use(VueRouter)
 Vue.use(Loading.directive)  // v-loading
 Vue.use(Scrollbar)
 
+Vue.use(mavonEditor)  // 富文本
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.component(Container.name, Container);
 Vue.component(Header.name, Header);

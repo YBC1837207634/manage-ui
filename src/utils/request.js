@@ -5,13 +5,12 @@ import config from '@/config'
 import { Message } from "element-ui"
 import store from "@/store"
 
-export default (function() {
+function createRequest(baseUrl = config.baseUrl) {
   var req = axios.create({
     // baseURL: '/',
-    baseURL: config.baseUrl,
+    baseURL: baseUrl,
     timeout: 10000,
   })
-
   req.interceptors.request.use(function (config){
     if (config.isToken && getToken()) {
       config.headers.token = getToken()
@@ -44,8 +43,13 @@ export default (function() {
           return Promise.reject(msg)
       } 
   })
-  
+
   return req
 
-}())
+}
+
+
+export default createRequest(config.baseUrl)
+
+export const weblogReq = createRequest('http://localhost:8081')
 

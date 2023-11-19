@@ -25,6 +25,7 @@ import AsideNav from './components/AsideNav'
 import HeaderNav from './components/HeaderNav'
 
 export default {
+    name: 'Layout',
     components: {
         AsideNav,
         HeaderNav

@@ -14,6 +14,7 @@
     "core-js": "^3.32.2",
     "default-passive-events": "^2.0.0",
     "element-ui": "^2.15.14",
+    "mavon-editor": "^2.10.4",
     "vue": "^2.6.14",
     "vue-cropper": "^0.6.4",
     "vue-router": "^3.6.5",

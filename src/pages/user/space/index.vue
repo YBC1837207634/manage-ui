@@ -7,7 +7,7 @@
                 </div>
                 <!-- 头像 -->
                 <el-upload class="avatar-uploader head" 
-                    action="http://localhost:8080/file/upload"
+                    :action="upload"
                     :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                     <img v-if="avatar" :src="avatar" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -64,6 +64,7 @@ import { mapActions } from 'vuex';
 import UserForm from './UserForm';
 import PasswordForm from './PasswordForm';
 import { userSpace } from '@/api/user';
+import config from '@/config';
 
 export default {
     components: {
@@ -84,13 +85,16 @@ export default {
     },
     computed: {
         avatar() {
-            return this.user.avatar
+            return config.ossUrl + this.user.avatar
         },
+        upload() {
+            return config.uploadUrl
+        }
     },
     methods: {
         handleAvatarSuccess(res) {
             if (res.code === 200 && res.msg && res.msg != null) {
-                this.user.avatar = res.msg;
+                this.user.avatar = config.ossUrl + res.msg;
                 this.UpdateAvatar(res.msg)
             } else {
                 this.$message.error('头像更新失败！');
@@ -108,7 +112,8 @@ export default {
             return isJPG && isLt2M;
         },
         ...mapActions('user', ['UpdateAvatar'])
-    }
+    },
+    
 }
 </script>
 

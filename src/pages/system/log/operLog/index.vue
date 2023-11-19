@@ -4,23 +4,21 @@
     <div class="top">
       <div class="item">
         <span>标题</span>
-        <el-input
-            class="top-item"
-            v-model.trim="params.title"
-            size="medium"
-            clearable>
+        <el-input class="top-item" v-model.trim="params.title" size="medium" clearable>
         </el-input>
       </div>
       <div class="item">
         <span>业务类型</span>
-        <el-select v-model="params.businessType" placeholder="选择类型" class="top-item" size="medium" :popper-append-to-body="false">
+        <el-select v-model="params.businessType" placeholder="选择类型" class="top-item" size="medium"
+          :popper-append-to-body="false">
           <el-option v-for="item in businessOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </div>
       <div class="item">
         <span>操作状态</span>
-        <el-select v-model="params.status" placeholder="选择状态" class="top-item" size="medium" :popper-append-to-body="false">
+        <el-select v-model="params.status" placeholder="选择状态" class="top-item" size="medium"
+          :popper-append-to-body="false">
           <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -38,29 +36,18 @@
       </div>
     </div>
     <div class="import-div">
-      <el-button
-        size="small"
-        plain
-        type="danger"
-        icon="el-icon-search"
-        :disabled="!$hasPermi(['system:operLog:del'])"
+      <el-button size="small" plain type="danger" icon="el-icon-search" :disabled="!$hasPermi(['system:operLog:del'])"
         @click="handleDeleteOperLogs">
         删除
-        </el-button>
-        <el-button
-        size="small"
-        plain
-        type="danger"
-        icon="el-icon-search"
-        :disabled="!$hasPermi(['system:operLog:del'])"
+      </el-button>
+      <el-button size="small" plain type="danger" icon="el-icon-search" :disabled="!$hasPermi(['system:operLog:del'])"
         @click="handleDeleteAll">
         清空
-        </el-button>
+      </el-button>
     </div>
 
-    <el-table :data="tableData" size="medium" :header-cell-style="{ background: '#F8F8F9', color: '#000' }" style="font-size: 15px;"
-      @selection-change="selectOperLog"
-    >
+    <el-table :data="tableData" size="medium" :header-cell-style="{ background: '#F8F8F9', color: '#000' }"
+      style="font-size: 15px;" @selection-change="selectOperLog">
       <el-table-column align="center" type="selection" width="55"></el-table-column>
       <el-table-column prop="id" label="日志编号" width="100" align="center"></el-table-column>
       <el-table-column prop="title" label="标题"></el-table-column>
@@ -91,89 +78,82 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination
-      background
-      style="text-align: center; padding-top: 20px"
-      @current-change="nextPage"
-      @size-change="handleSizeChange"
-      :page-size="params.pageSize"
-      :current-page.sync="currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      layout="total, prev, pager, next, sizes, jumper"
-      :total="total">
+    <el-pagination background style="text-align: center; padding-top: 20px" @current-change="nextPage"
+      @size-change="handleSizeChange" :page-size="params.pageSize" :current-page.sync="currentPage"
+      :page-sizes="[10, 20, 50, 100]" layout="total, prev, pager, next, sizes, jumper" :total="total">
     </el-pagination>
     <!-- Dialog -->
     <el-dialog title="详情" :visible.sync="dialog" :modal="false">
       <div class="logDetails">
         <form class="el-form">
-            <div class="el-row">
-              <div class="el-col el-col-12">
-                <div class="el-form-item el-form-item--mini">
-                  <label class="el-form-item__label" style="width: 100px;">操作模块：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.title }}</div>
-                </div>
-                <div class="el-form-item el-form-item--mini">
-                  <label class="el-form-item__label" style="width: 100px;">登录信息：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operLocation }}</div>
-                </div>
+          <div class="el-row">
+            <div class="el-col el-col-12">
+              <div class="el-form-item el-form-item--mini">
+                <label class="el-form-item__label" style="width: 100px;">操作模块：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.title }}</div>
               </div>
-              <div class="el-col el-col-12">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">请求地址：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operUrl }}</div>
-                </div>
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">请求方式：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.requestMethod }}</div>
-                </div>
+              <div class="el-form-item el-form-item--mini">
+                <label class="el-form-item__label" style="width: 100px;">登录信息：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operLocation }}</div>
               </div>
-              <div class="el-col el-col-24">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">操作方法：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">
-                    {{ logDetails.method }}</div>
-                </div>
+            </div>
+            <div class="el-col el-col-12">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">请求地址：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operUrl }}</div>
               </div>
-              <div class="el-col el-col-24">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">请求参数：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operParam }}</div>
-                </div>
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">请求方式：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.requestMethod }}</div>
               </div>
-              <div class="el-col el-col-24">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">返回参数：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.jsonResult }}</div>
-                </div>
+            </div>
+            <div class="el-col el-col-24">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">操作方法：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">
+                  {{ logDetails.method }}</div>
               </div>
-              <div class="el-col el-col-6">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">操作状态：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">
-                    <div>{{ logDetails.status == 1 ? '正常' : '异常' }}</div>
-                  </div>
-                </div>
+            </div>
+            <div class="el-col el-col-24">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">请求参数：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operParam }}</div>
               </div>
-              <div class="el-col el-col-8">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">消耗时间：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.costTime }}</div>
-                </div>
+            </div>
+            <div class="el-col el-col-24">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">返回参数：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.jsonResult }}</div>
               </div>
-              <div class="el-col el-col-10">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">操作时间：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operTime }}</div>
-                </div>
-              </div>
-              <div class="el-col el-col-8">
-                <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
-                    style="width: 100px;">错误信息：</label>
-                  <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.errorMsg }}</div>
+            </div>
+            <div class="el-col el-col-6">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">操作状态：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">
+                  <div>{{ logDetails.status == 1 ? '正常' : '异常' }}</div>
                 </div>
               </div>
             </div>
-          </form>
+            <div class="el-col el-col-8">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">消耗时间：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.costTime }}</div>
+              </div>
+            </div>
+            <div class="el-col el-col-10">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">操作时间：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.operTime }}</div>
+              </div>
+            </div>
+            <div class="el-col el-col-8">
+              <div class="el-form-item el-form-item--mini"><label class="el-form-item__label"
+                  style="width: 100px;">错误信息：</label>
+                <div class="el-form-item__content" style="margin-left: 100px;">{{ logDetails.errorMsg }}</div>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
       <el-button @click="dialog = false">关闭</el-button>
     </el-dialog>
@@ -278,9 +258,9 @@ export default {
     },
     // 选择一页显示数据数量
     handleSizeChange(val) {
-        this.params.pageSize = this.pageSize = val;
-        this.getList()
-      },
+      this.params.pageSize = this.pageSize = val;
+      this.getList()
+    },
     getList() {
       Object.keys(this.params).forEach((key) => {
         if (this.params[key] === "") {
@@ -319,29 +299,29 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }).then(() => {
-            this.deleteOperLog(this.checked);
-          }).catch((e) => e);
+          this.deleteOperLog(this.checked);
+        }).catch((e) => e);
     },
     handleDeleteAll() {
       this.$confirm(`是否删除所有记录`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }).then(() => {
-            removeOperLogAll().then((res) => {
-              this.getList();
-              this.$message.success(res.data.msg);
-          }).catch((e) => this.$message.error(e));
-          }).catch((e) => e);
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        removeOperLogAll().then((res) => {
+          this.getList();
+          this.$message.success(res.data.msg);
+        }).catch((e) => this.$message.error(e));
+      }).catch((e) => e);
     },
     // 删除登陆记录
     deleteOperLog(ids) {
       removeOperLog(ids)
-          .then((res) => {
-            this.clicked = []
-            this.getList();
-            this.$message.success(res.data.msg);
-          }).catch((e) => this.$message.error(e));
+        .then((res) => {
+          this.clicked = []
+          this.getList();
+          this.$message.success(res.data.msg);
+        }).catch((e) => this.$message.error(e));
     },
 
   }
