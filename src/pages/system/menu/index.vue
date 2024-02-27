@@ -136,7 +136,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="是否缓存" v-if="form.menuType=='C'">
+                        <el-form-item v-if="form.menuType=='C'">
+                            <span slot="label">
+                                <el-tooltip content="选择是则会被`keep-alive`缓存，需要匹配组件的`name`和地址保持一致" placement="top">
+                                <i class="el-icon-question"></i>
+                                </el-tooltip>
+                                是否缓存
+                            </span>
                             <el-radio-group v-model.trim="form.cache">
                                 <el-radio :label="1">缓存</el-radio>
                                 <el-radio :label="0">不缓存</el-radio>
@@ -182,6 +188,20 @@
                         </span>
                         </el-form-item>
                     </el-col> -->
+                    <el-col :span="12">
+                        <el-form-item prop="status">
+                        <span slot="label">
+                            <el-tooltip content="选择停用则路由将不会出现在侧边栏，也不能被访问" placement="top">
+                            <i class="el-icon-question"></i>
+                            </el-tooltip>
+                            菜单状态
+                        </span>
+                        <el-radio-group v-model="form.status">
+                            <el-radio :label="1">显示</el-radio>
+                            <el-radio :label="0">隐藏</el-radio>
+                        </el-radio-group>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="12">
                         <el-form-item label="显示排序" prop="orderNum">
                             <el-input-number v-model="form.orderMenu" controls-position="right" :min="0" />
