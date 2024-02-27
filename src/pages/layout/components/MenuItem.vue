@@ -3,7 +3,7 @@
         <template v-for="(route, index) in asideRouter" >
             <!-- && route.children.length > 0) || (route.redirect && route.redirect === 'noRedirect') -->
             <el-submenu
-                v-if="((route.meta.aside === true && route.children && route.children != null))"  
+                v-if="(route.meta.aside === true && route.children && route.children != null)"  
                 :index="getPath(parentPath, route.path)"
                 :key="index + route.path"
                 >

@@ -12,6 +12,7 @@ import {
   Input, 
   Header, 
   Aside, 
+  InputNumber,
   Main, 
   Container ,
   Table,
@@ -50,7 +51,11 @@ import {
   Tree,
   Calendar,
   Upload,
-  Notification
+  Notification,
+  Row,
+  Link,
+  Tooltip,
+  Checkbox
 
 } from 'element-ui';
 
@@ -65,16 +70,18 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import 'animate.css';
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-// use
-
+import Clipboard from 'v-clipboard'
 
 Vue.config.productionTip = false
 
+// use
 Vue.use(VueRouter)
 Vue.use(Loading.directive)  // v-loading
 Vue.use(Scrollbar)
-
+Vue.use(Clipboard)  // 剪切组件
 Vue.use(mavonEditor)  // 富文本
+
+// component
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.component(Container.name, Container);
 Vue.component(Header.name, Header);
@@ -119,6 +126,11 @@ Vue.component(Tree.name, Tree)
 Vue.component(Calendar.name, Calendar)
 Vue.component(Upload.name, Upload)
 Vue.component(Notification.name, Notification)
+Vue.component(Row.name, Row)
+Vue.component(Link.name, Link)
+Vue.component(Tooltip.name, Tooltip)
+Vue.component(InputNumber.name, InputNumber)
+Vue.component(Checkbox.name, Checkbox)
 
 Vue.prototype.$hasPermi = hasPermi
 Vue.prototype.$confirm = MessageBox.confirm;

@@ -80,7 +80,7 @@ export default {
     width: 100% !important;
 }
 .el-scrollbar {
-    min-width: 200px;
+    /* min-width: 200px; */
     width: 100%;
     height: 100%;
 }

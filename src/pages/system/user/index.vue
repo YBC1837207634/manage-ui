@@ -194,11 +194,11 @@
       width="500px"
     >
       <el-form :model="user" label-width="80px" :rules="rules">
-        <el-form-item label="用户昵称">
+        <el-form-item label="用户昵称" prop="nickname">
           <el-input
             v-model.trim="user.nickname"
             autocomplete="off"
-            class="dialog-input"
+            maxlength="30"
           ></el-input>
         </el-form-item>
         <el-form-item label="性别">
@@ -211,14 +211,14 @@
           <el-input
             v-model.trim="user.phone"
             autocomplete="off"
-            class="dialog-input"
+            maxlength="11"
           ></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input
             v-model.trim="user.mail"
             autocomplete="off"
-            class="dialog-input"
+            maxlength="50"
           ></el-input>
         </el-form-item>
         <el-form-item label="角色">
@@ -256,12 +256,11 @@
       :modal="false"
       width="500px"
     >
-      <el-form :model="form" label-width="80px" :rules="rules">
+      <el-form :model="form" label-width="100px" :rules="rules" ref="form">
         <el-form-item label="用户昵称">
           <el-input
             v-model.trim="form.nickname"
             autocomplete="off"
-            class="dialog-input"
           ></el-input>
         </el-form-item>
         <el-form-item label="性别">
@@ -274,28 +273,24 @@
           <el-input
             v-model.trim="form.phone"
             autocomplete="off"
-            class="dialog-input"
           ></el-input>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input
             v-model.trim="form.mail"
             autocomplete="off"
-            class="dialog-input"
           ></el-input>
         </el-form-item>
         <el-form-item label="用户名">
           <el-input
             v-model.trim="form.username"
             autocomplete="off"
-            class="dialog-input"
           ></el-input>
         </el-form-item>
         <el-form-item label="密码">
           <el-input
             v-model.trim="form.password"
             autocomplete="off"
-            class="dialog-input"
           ></el-input>
         </el-form-item>
         <el-form-item label="角色">
@@ -337,8 +332,8 @@ import {
   geyUserById,
   remove,
   saveUser,
-} from "@/api/user";
-import { getRoleList } from "@/api/role";
+} from "@/api/system/user";
+import { getRoleList } from "@/api/system/role";
 import { mapState } from "vuex";
 import code from "@/config/code";
 
@@ -370,7 +365,23 @@ export default {
       timeList: [],
       total: 0,
       // 表单校验
-      rules: {},
+      rules: {
+          nickname: [
+              { required: true, message: "请输入菜单名称", trigger: "blur" }
+          ],
+          path: [
+              { required: true, message: "请输入路由地址", trigger: "blur" }
+          ],
+          name: [
+              { required: true, message: "请输入组件名称", trigger: "blur" }
+          ],
+          component: [
+              { required: true, message: "请输入组件地址", trigger: "blur" }
+          ],
+          purview: [
+              { required: true, message: "请输入权限标识", trigger: "blur" }
+          ],
+      },
       // 状态
       statusOptions: [
         {
@@ -591,9 +602,6 @@ export default {
 };
 </script>
 <style  scoped>
-.app-container {
-
-}
 
 .top {
   /* margin: 20px 0; */
@@ -643,3 +651,4 @@ export default {
   margin-bottom: 0 !important;
 }
 </style>
+@/api/system/user@/api/system/role

@@ -69,7 +69,7 @@
     </div>
 </template>
 <script>
-import { login, register } from '@/api/user.js'
+import { login, register } from '@/api/system/user.js'
 import { setToken } from '@/utils/auth'
 
 export default {
@@ -387,4 +387,4 @@ export default {
 .el-form-item {
     margin: 10px 0 !important; 
 }
-</style>
+</style>@/api/system/user.js

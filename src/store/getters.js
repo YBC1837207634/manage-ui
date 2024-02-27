@@ -4,5 +4,7 @@ export default {
     purview: state => state.user.purview,
     isLogin: state => state.user.isLogin,
     token: state => state.user.token,
-    activeMenu: state => state.user.activeMenu
+    activeMenu: state => state.user.activeMenu,
+    tags: state => state.permissions.tags,
+    currentTag: state => state.permissions.currentTag
 }

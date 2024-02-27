@@ -87,7 +87,6 @@
         style="text-align: center; padding-top: 20px"
         @current-change="nextPage"
         @size-change="handleSizeChange"
-        :page-size="params.pageSize"
         :current-page.sync="currentPage"
         :page-sizes="[10, 20, 50, 100]"
         layout="total, prev, pager, next, sizes, jumper"
@@ -102,7 +101,7 @@
     pages,
     removeLogininfor,
     removeLogininforAll
-  } from "@/api/logininfor";
+  } from "@/api/system/logininfor";
 
   export default {
     name: "Logininfor",
@@ -183,6 +182,7 @@
       },
       // 选择一页显示数据数量
       handleSizeChange(val) {
+        console.log(val);
         this.params.pageSize = this.pageSize = val;
         this.getList()
       },
@@ -274,3 +274,4 @@
     margin-bottom: 0 !important;
   }
 </style>
+@/api/system/logininfor

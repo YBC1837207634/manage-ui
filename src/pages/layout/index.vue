@@ -11,7 +11,7 @@
                 <el-main class="clear-margin-padding main">
                     <transition name="fade-transform" mode="out-in">
                         <keep-alive :include="$store.state.permissions.caches">
-                            <router-view></router-view>
+                            <router-view :key = "$route.path"></router-view>
                         </keep-alive>
                     </transition>
                 </el-main>
@@ -43,7 +43,7 @@ export default {
 }
 
 .container {
-    font-size: 20px;
+    /* font-size: 20px; */
     height: 100%;
     width: 100%;
 }

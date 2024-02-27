@@ -4,6 +4,7 @@ import code from '@/config/code'
 import config from '@/config'
 import { Message } from "element-ui"
 import store from "@/store"
+import { tansParams } from "./commonUtils"
 
 function createRequest(baseUrl = config.baseUrl) {
   var req = axios.create({
@@ -12,8 +13,16 @@ function createRequest(baseUrl = config.baseUrl) {
     timeout: 10000,
   })
   req.interceptors.request.use(function (config){
+    
     if (config.isToken && getToken()) {
       config.headers.token = getToken()
+    }
+    // get请求映射params参数
+    if (config.method === 'get' && config.params) {
+      let url = config.url + '?' + tansParams(config.params);
+      url = url.slice(0, -1);
+      config.params = {};
+      config.url = url;
     }
     return config
   })
@@ -31,9 +40,9 @@ function createRequest(baseUrl = config.baseUrl) {
       } else if (state === code.UNAUTHORIZED) { 
         // 防止多次退出
           if(store.getters.isLogin) {
-            // removeToken()
-            store.dispatch('user/Exit')
-            // location.href = config.jumpLogin;
+            store.dispatch('user/Exit').then(()=>{
+              location.href = '/login';
+            })
             Message({type: 'error', message: msg})
             // '令牌失效，请重新登录！'
           }
@@ -48,8 +57,5 @@ function createRequest(baseUrl = config.baseUrl) {
 
 }
 
-
 export default createRequest(config.baseUrl)
-
-export const weblogReq = createRequest('http://localhost:8081')
 

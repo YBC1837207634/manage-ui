@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { updateUserSpace } from '@/api/user';
+import { updateUserSpace } from '@/api/system/user';
 
 export default {
     props: ['user'],
@@ -65,4 +65,4 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped></style>@/api/system/user

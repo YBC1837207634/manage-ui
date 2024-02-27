@@ -6,7 +6,6 @@
                 <i :class="iconName" style="padding: 0px 15px; font-size: 20px;"></i>
             </span>
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <!-- <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item> -->
                 <el-breadcrumb-item v-for="track, index in breadcrumb" :key="index"
                     :to="track.path == '/index' ? '/index' : ''">{{ track.meta.title }}</el-breadcrumb-item>
             </el-breadcrumb>
@@ -17,14 +16,14 @@
                 <el-avatar :src="avatar" :size="42" shape="square" class="head-icon">
                 </el-avatar>
                 <!-- 下拉菜单 -->
-                <el-dropdown @command="handleCommand">
+                <el-dropdown>
                     <span class="el-dropdown-link">
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="space">个人中心</el-dropdown-item>
-                        <el-dropdown-item command="setting">设置</el-dropdown-item>
-                        <el-dropdown-item command="out" divided>退出</el-dropdown-item>
+                        <el-dropdown-item @click.native="$router.push('/user/space')">个人中心</el-dropdown-item>
+                        <el-dropdown-item >设置</el-dropdown-item>
+                        <el-dropdown-item @click.native="userExit" divided>退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
@@ -32,26 +31,22 @@
 
         <!-- 头部下半部分 -->
         <div class="header-bottom">
-
             <div class="tags">
-                <div v-for="tag, index in tags" :key="index" :class="'tag ' + `${current === tag.name ? 'tag-active' : ''}`"
-                    @click="switchTag(tag)">
+                <div v-for="tag, index in $store.getters.tags" :key="index" :class="'tag ' + `${$store.getters.currentTag === tag.path ? 'tag-active' : ''}`"
+                    @click="$store.commit('permissions/SWITCH_TAG', tag)">
                     <div class="tag-content">
-                        <span>{{ tag.meta.title }}</span>
+                        <span>{{ tag.title }}</span>
                         <i v-if="tag.path != '/index'" style="margin-left: 4px; font-size: 15px;" class="el-icon-close"
-                            @click.stop="closeTag(tag, index)"></i>
+                            @click.stop="$store.commit('permissions/CLOSE_TAG', {tag, index})"></i>
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import config from '@/config';
 
 export default {
     data() {
@@ -62,7 +57,7 @@ export default {
             },
             breadcrumb: [],
             tags: [{ name: 'Index', meta: { title: '首页' }, path: '/index' }],
-            current: 'Index',
+            current: '/index',
         }
     },
     created() {
@@ -82,15 +77,10 @@ export default {
         asideSwith() {
             this.$store.commit('asideSwitch')
         },
-        handleCommand(value) {
-            if (value === 'out') {
-                this.userExit()
-            } else if (value === 'space') {
-                this.$router.push('/user/space')
-            }
-        },
         userExit() {
-            this.$store.dispatch('user/Exit')
+            this.$store.dispatch('user/Exit').then(()=>{
+                location.href = '/index'
+            })
             this.$message({
                 type: 'success',
                 message: '已退出帐号!'
@@ -106,47 +96,17 @@ export default {
             }
         },
         updateTagsNav(route) {
-            if (route.path === '/login') return 
-            // 如果当前页签列表中没有页签就添加进去
-            if (!this.tags.some(e => e.path === route.path)) {
-                this.tags.push(route)
-                if (route.meta.cache && route.meta.cache != null && route.meta.cache != 0)
-                    this.AddCache(route.name)
-            }
-            // 当跳转路由时切换页签。
-            this.current = route.name
+            this.OpenTag({ name: route.name, path: route.path, title: route.meta.title, cache: route.meta.cache, params: route.params })
         },
-        switchTag(tag) {
-            // 避免多次点击
-            if (this.current != tag.name) {
-                // 切换显示焦点
-                this.current = tag.name
-                // 切换路由
-                this.$router.replace(tag.path)
-            }
-        },
-        closeTag(tag, index) {
-            if (tag.fullPath == this.$route.fullPath) {
-                if (index == 0) {
-                    return 
-                }
-                this.switchTag(this.tags[index - 1])    
-            }
-            // 如果要关闭的页签是缓存的就删除该缓存
-            if (tag.meta.cache && tag.meta.cache != null && tag.meta.cache === 1) {
-                // 将关闭的组件移除缓存
-                this.RemoveCache(tag.name)
-            }
-            this.tags.splice(index, 1)
-        },
-        ...mapActions('permissions', ['RemoveCache', 'AddCache'])
+        
+        ...mapActions('permissions', ['OpenTag'])
     },
     computed: {
         iconName() {
             return this.iconStyle[this.$store.state.isCollapse]
         },
         avatar() {
-            return config.ossUrl + this.userInfo.avatar
+            return this.userInfo?.avatar
         },
         ...mapState('user', ['userInfo']),
     }

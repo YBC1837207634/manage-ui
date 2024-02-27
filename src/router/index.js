@@ -34,7 +34,7 @@ export const basicRoutes = [
 
     {
         path: '/login',
-        name: '登陆',
+        name: 'Login',
         meta: {noAuth: true, aside: false},
         component: () => import('@/pages/login')
     },
@@ -51,6 +51,20 @@ export const basicRoutes = [
             }
         ]
     },
+    {
+        path: '/tool/gen-edit',
+        component: Layout,
+        meta: {aside: false},
+        permissions: ['tool:gen:edit'],
+        children: [
+          {
+            path: 'index/:tableId(\\d+)',
+            component: () => import('@/pages/tool/generator/editTable'),
+            name: 'GenEdit',
+            meta: { title: '修改生成配置', activeMenu: '/tool/generator', aside: false }
+          }
+        ]
+      }
 ]
 
 // 防止重复点击路由 
@@ -103,7 +117,8 @@ router.beforeEach((to, from, next)=>{
         } else {
             next()
         }
-        store.commit('user/SET_ACTIVE_MENU', to.fullPath)
+        
+        store.commit('user/SET_ACTIVE_MENU', to.meta.activeMenu == undefined ? to.fullPath: to.meta.activeMenu)
         handleKeepAlive(to)
         // 没有登陆
     } else {

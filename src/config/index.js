@@ -5,6 +5,7 @@ export default {
     weblogUrl: 'http://localhost:8081',
     // 测试时使用 后面使用 history 时替换
     jumpLogin: 'http://localhost:3000/#/login',
-    uploadUrl: 'http://localhost:8080/file',
-    ossUrl: '//ffff.oss-cn-shanghai.aliyuncs.com/'
+    uploadUrl: 'http://localhost:8080/file/upload',
+    // ossUrl: '//ffff.oss-cn-shanghai.aliyuncs.com/'
+    ossUrl: ''
 }

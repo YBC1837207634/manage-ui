@@ -63,7 +63,7 @@
 import { mapActions } from 'vuex';
 import UserForm from './UserForm';
 import PasswordForm from './PasswordForm';
-import { userSpace } from '@/api/user';
+import { userSpace } from '@/api/system/user';
 import config from '@/config';
 
 export default {
@@ -85,7 +85,8 @@ export default {
     },
     computed: {
         avatar() {
-            return config.ossUrl + this.user.avatar
+            // return config.ossUrl + this.user.avatar
+            return this.user.avatar
         },
         upload() {
             return config.uploadUrl
@@ -198,4 +199,4 @@ export default {
     padding: 10px 0;
     border-top: 1px solid #e7eaec;
 }
-</style>
+</style>@/api/system/user

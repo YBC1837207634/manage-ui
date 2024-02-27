@@ -1,5 +1,4 @@
-import { getInfo, updateUserSpace } from "@/api/user"
-import config from "@/config"
+import { getInfo, updateUserSpace } from "@/api/system/user"
 import { removeToken } from "@/utils/auth"
 import { Message } from "element-ui"
 
@@ -8,7 +7,8 @@ const state = {
     purview: [],
     isLogin: false,
     token: '',
-    activeMenu: ''
+    // 当前活动的侧边栏选项
+    activeMenu: '',
 }
 
 const actions = {
@@ -24,14 +24,18 @@ const actions = {
         commit('DELETE_USERINFO')
     },
     Exit({ commit, state }){
-        removeToken()
-        commit('DELETE_TOKEN')
-        // 清除用户信息
-        commit('DELETE_USERINFO')
-        // 权限路由
-        commit('permissions/REMOVE_ROUTER',null, {root:true})
-        state.isLogin = false
-        location.href = config.jumpLogin
+        return new Promise(resolve => {
+            removeToken()
+            commit('DELETE_TOKEN')
+            // 清除用户信息
+            commit('DELETE_USERINFO')
+            // 权限
+            commit('DELETE_PURVIEW')
+            // 权限路由
+            commit('permissions/REMOVE_ROUTER',null, {root:true})
+            state.isLogin = false
+            resolve()
+        })
     },
     UpdateAvatar({commit}, avatarUrl) {
         updateUserSpace({avatar: avatarUrl}).then(()=>{

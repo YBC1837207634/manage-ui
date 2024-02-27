@@ -166,7 +166,7 @@ import {
   pages,
   removeOperLog,
   removeOperLogAll
-} from "@/api/operLog";
+} from "@/api/system/operLog";
 
 export default {
   name: "OperLog",
@@ -372,3 +372,4 @@ export default {
   margin-bottom: 0 !important;
 }
 </style>
+@/api/system/operLog

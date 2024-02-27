@@ -248,8 +248,8 @@
 </template>
   
 <script>
-import { getRoleList, updateRole, getRole, removeRole, saveRole } from '@/api/role';
-import { getMenuTree, getMenuTreeSelect } from '@/api/menu';
+import { getRoleList, updateRole, getRole, removeRole, saveRole } from '@/api/system/role';
+import { getMenuTree, getMenuTreeSelect } from '@/api/system/menu';
 
 export default {
     name: 'Role',
@@ -507,4 +507,4 @@ export default {
   }
 
 </style>
-  
+  @/api/system/menu@/api/system/role
